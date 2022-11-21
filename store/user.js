@@ -11,7 +11,7 @@ export const mutations = {
   setUser(state, data) {
     state.showUser = data
   },
-  singleUser(state, data) {
+  setSingleUser(state, data) {
      state.singleUser = data
   }
 }
@@ -26,9 +26,6 @@ export const actions = {
       .then((data) => {
         this.$cookies.set('token', data.data.token)
       })
-      .catch((error) => {
-        console.log(error)
-      })
   },
 
   async getUser({ commit }, params) {
@@ -36,19 +33,13 @@ export const actions = {
       .get('https://reqres.in/api/users', { params })
       .then((user) => {
         commit('setUser', user.data)
-        console.log(user.data)
-      })
-      .catch((error) => {
-        console.log(error)
       })
   },
 
-  async singleUser({commit},id) {
-    await this.$axios.get(`https://reqres.in/api/users/2`)
+  async oneUser({commit},id) {
+    await this.$axios.get(`https://reqres.in/api/users/`,id)
     .then((user) => {
-      commit('singleUser', user.data.data)
-    }).catch((error) => {
-      console.log(error)
+      commit('setSingleUser', user.data.data)
     })
   }
 }

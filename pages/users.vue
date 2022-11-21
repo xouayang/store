@@ -5,10 +5,12 @@
         <div class="white--text">Create User</div>
         <v-icon class="pl-4">mdi-account-plus-outline</v-icon>
       </v-btn>
+      <v-btn color="error" @click="showUserId(id)">showID</v-btn>
       <v-dialog v-model="dialogUser">
-         <v-card>
-           <!-- <v-card-title>{{showUser.first_name}}</v-card-title> -->
-          </v-card>  
+        <v-card>
+          <v-card-title>email {{ userId.email }}</v-card-title>
+          <v-card-text>{{ userId.id }}</v-card-text>
+        </v-card>
       </v-dialog>
       <v-dialog
         v-model="dialog"
@@ -97,8 +99,7 @@
     </div>
     <v-spacer />
     <div class="mt-8">
-      {{singleUser}}
-      <!-- {{ options }} -->
+      {{ userId }}
       <v-card-title>Manage User</v-card-title>
       <v-data-table
         :headers="tableHeaders"
@@ -120,7 +121,9 @@
           <v-tooltip top color="primary">
             <template #activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon color="primary" @click="dialogUser = !dialogUser">mdi-pencil-outline</v-icon>
+                <v-icon color="primary" @click="dialogUser = !dialogUser"
+                  >mdi-pencil-outline</v-icon
+                >
               </v-btn>
             </template>
             <span>Edit</span>
@@ -134,6 +137,9 @@
             <span>Reset Password</span>
           </v-tooltip>
         </template>
+        <template #[`item.avatar`]="{ item }">
+          <v-img :src="item.avatar" alt="avatar" height="80" width="80" class="rounded-circle" />
+        </template>
       </v-data-table>
     </div>
   </div>
@@ -145,7 +151,7 @@ export default {
     return {
       options: {},
       dialog: false,
-      dialogUser:false,
+      dialogUser: false,
       tableHeaders: [
         {
           text: 'UserID',
@@ -153,12 +159,10 @@ export default {
           sortable: false,
           value: 'id',
         },
-        // { text: 'avatar', value: 'avatar' },
+        { text: 'avatar', value: 'avatar' },
         { text: 'Firstname', value: 'first_name' },
         { text: 'Lastname', value: 'last_name' },
-        // { text: 'Address', value: 'Address' },
         { text: 'Email', value: 'email' },
-        // { text: 'Password', value: 'Password' },
         { text: '', value: 'action' },
       ],
     }
@@ -167,9 +171,9 @@ export default {
     mapUser() {
       return this.$store.state.user.showUser
     },
-    singleUser() {
+    userId() {
       return this.$store.state.user.singleUser
-    }
+    },
   },
   watch: {
     options(value) {
@@ -177,9 +181,10 @@ export default {
       this.$store.dispatch('user/getUser', { page, per_page: itemPerpage })
     },
   },
-  async mounted() {
-    await this.$store.dispatch('user/singleUser')
+  methods: {
+    showUserId(id) {
+      this.$store.dispatch('user/oneUser', id)
+    },
   },
-  
 }
 </script>

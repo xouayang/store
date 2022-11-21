@@ -47,8 +47,8 @@
             <v-btn color="primary"  fab small dark v-bind="attrs" v-on="on">
               <v-badge dot overlap color="success">
                 <v-btn icon>
-                  <v-icon color="white">mdi-account-outline</v-icon></v-btn
-                >
+                  <v-icon color="white">mdi-account-outline</v-icon>
+                </v-btn>
               </v-badge>
             </v-btn>
           </template>
